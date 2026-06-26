@@ -1,0 +1,128 @@
+<div class="fade-in">
+
+  <!-- Header -->
+  <div class="section-header mb-3">
+    <div>
+      <h2>
+        <i class="bi bi-star-fill text-gold" style="font-size:1.2rem;"></i>
+        Minhas Favoritas
+      </h2>
+      <p class="page-subtitle">Universidades salvas localmente no navegador.</p>
+    </div>
+    <a routerLink="/home" class="btn btn-primary btn-sm">
+      <i class="bi bi-search"></i> Pesquisar Países
+    </a>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="totalFavoritesCount() === 0" class="card">
+    <div class="card-body empty-state">
+      <div class="empty-icon" style="color:var(--accent-gold);"><i class="bi bi-star"></i></div>
+      <h3>Nenhuma favorita ainda</h3>
+      <p>
+        Faça uma pesquisa na página inicial e clique no ícone de estrela para salvar universidades.
+      </p>
+      <a routerLink="/home" class="btn btn-primary">
+        <i class="bi bi-search"></i> Buscar Universidades
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="totalFavoritesCount() > 0">
+
+    <!-- Stats -->
+    <div class="grid-2 mb-6">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Total de Favoritas</p>
+          <div class="stat-value text-gold">{{ totalFavoritesCount() }}</div>
+        </div>
+        <div class="stat-icon icon-gold"><i class="bi bi-star-fill"></i></div>
+      </div>
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Domínios Representados</p>
+          <div class="stat-value text-teal">{{ uniqueDomainsCount() }}</div>
+        </div>
+        <div class="stat-icon icon-teal"><i class="bi bi-globe-americas"></i></div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="search-box mb-4" style="padding:18px 24px;">
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input
+          type="text"
+          class="form-control"
+          [ngModel]="filterTerm()"
+          (ngModelChange)="filterTerm.set($event)"
+          placeholder="Filtrar favoritas pelo nome..."
+        >
+      </div>
+    </div>
+
+    <!-- Filter Empty -->
+    <div *ngIf="filteredFavorites().length === 0" class="alert alert-warning mb-4">
+      <i class="bi bi-info-circle-fill"></i>
+      <span>Nenhuma favorita atende ao filtro <strong>"{{ filterTerm() }}"</strong>.</span>
+    </div>
+
+    <!-- Favorites Grid -->
+    <div class="grid-auto">
+      <div class="uni-card" *ngFor="let uni of filteredFavorites()">
+
+        <!-- Remove button -->
+        <button
+          (click)="removeFavorite(uni.name)"
+          class="card-fav-btn"
+          style="
+            position:absolute; top:16px; right:16px;
+            background:rgba(239,68,68,0.08);
+            border:1px solid rgba(239,68,68,0.25);
+            color:#f87171;
+            border-radius:8px;
+            width:34px; height:34px;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; transition:all .2s;
+            font-size:.85rem;
+          "
+          title="Remover dos Favoritos"
+        >
+          <i class="bi bi-trash-fill"></i>
+        </button>
+
+        <h5 class="uni-name">{{ uni.name }}</h5>
+        <p class="uni-country">
+          <i class="bi bi-geo-alt-fill" style="color:#f87171;"></i>
+          {{ uni.country }}
+        </p>
+        <hr class="uni-divider">
+
+        <p class="domains-label">Domínios Institucionais</p>
+        <div class="domains-list">
+          <span *ngFor="let domain of uni.domains" class="badge badge-domain">
+            <i class="bi bi-globe"></i> {{ domain }}
+          </span>
+        </div>
+
+        <div style="margin-top:auto; padding-top:20px;">
+          <a
+            *ngIf="uni.web_pages && uni.web_pages.length > 0; else noWebsite"
+            [href]="uni.web_pages[0]"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-ghost btn-full"
+          >
+            <i class="bi bi-box-arrow-up-right"></i> Abrir Site Oficial
+          </a>
+          <ng-template #noWebsite>
+            <button class="btn btn-ghost btn-full" disabled style="opacity:.4;">
+              <i class="bi bi-slash-circle"></i> Sem Website
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

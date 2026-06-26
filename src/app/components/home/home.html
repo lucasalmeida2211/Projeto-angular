@@ -1,0 +1,153 @@
+<div class="fade-in">
+
+  <!-- Hero Section -->
+  <div class="hero-section mb-6">
+    <p class="hero-eyebrow">Catálogo Global</p>
+    <h1 class="hero-title">Explore Universidades<br>do Mundo Inteiro</h1>
+    <p class="hero-subtitle">
+      Pesquise o catálogo completo de universidades por país, visualize estatísticas em tempo real e guarde suas favoritas.
+    </p>
+  </div>
+
+  <!-- Search Box -->
+  <div class="search-box mb-6">
+    <h4 style="font-family:'Playfair Display',serif; font-weight:700; font-size:1.1rem; margin-bottom:16px; color:var(--text-primary);">
+      Pesquisar por País
+    </h4>
+    <form (ngSubmit)="onSearch(searchCountry)">
+      <div class="flex gap-3 mb-3" style="flex-wrap:wrap;">
+        <div class="search-field-wrap flex-1" style="min-width:220px;">
+          <i class="bi bi-globe2 search-icon"></i>
+          <input
+            type="text"
+            name="searchCountry"
+            [(ngModel)]="searchCountry"
+            class="search-input"
+            placeholder="Digite o país em inglês (ex: Brazil, Japan, Canada...)"
+            [disabled]="isLoading"
+            required
+            autocomplete="off"
+          >
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading" style="flex-shrink:0;">
+          <span *ngIf="isLoading" class="spinner"></span>
+          <i *ngIf="!isLoading" class="bi bi-search"></i>
+          {{ isLoading ? 'Buscando...' : 'Pesquisar' }}
+        </button>
+      </div>
+
+      <!-- Quick countries -->
+      <div class="flex items-center gap-2" style="flex-wrap:wrap;">
+        <span class="text-xs text-muted-c" style="flex-shrink:0;">Sugeridos:</span>
+        <button
+          *ngFor="let country of popularCountries"
+          type="button"
+          (click)="onSelectPopular(country)"
+          class="tag"
+          [disabled]="isLoading"
+        >
+          {{ country }}
+        </button>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+    </form>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="grid-3 mb-6">
+    <div class="stat-card">
+      <div>
+        <p class="stat-label">Favoritas Salvas</p>
+        <div class="stat-value text-gold">{{ totalFavoritesCount() }}</div>
+      </div>
+      <div class="stat-icon icon-gold">
+        <i class="bi bi-star-fill"></i>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div>
+        <p class="stat-label">Consultas no Histórico</p>
+        <div class="stat-value text-purple">{{ totalSearchesCount() }}</div>
+      </div>
+      <div class="stat-icon icon-purple">
+        <i class="bi bi-clock-history"></i>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div>
+        <p class="stat-label">Mais Pesquisado</p>
+        <div class="stat-value text-teal" style="font-size:1.3rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;">
+          {{ mostSearchedCountry() }}
+        </div>
+      </div>
+      <div class="stat-icon icon-teal">
+        <i class="bi bi-heart-fill"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- History + Chart -->
+  <div *ngIf="searchHistory().length > 0" class="grid-2">
+    <!-- History Table -->
+    <div class="card">
+      <div class="card-header flex justify-between items-center" style="padding-bottom:16px;">
+        <h5 class="card-title">Histórico de Pesquisas</h5>
+        <button (click)="clearHistory()" class="btn btn-danger-ghost btn-sm">
+          <i class="bi bi-trash3"></i> Limpar
+        </button>
+      </div>
+      <div class="card-body" style="padding-top:0;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>País</th>
+                <th>Data/Hora</th>
+                <th style="text-align:center;">Universidades</th>
+                <th style="text-align:right;">Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of searchHistory()">
+                <td><strong>{{ item.country }}</strong></td>
+                <td class="text-sm text-muted-c">{{ item.timestamp }}</td>
+                <td style="text-align:center;">
+                  <span class="badge badge-count">{{ item.universityCount }}</span>
+                </td>
+                <td style="text-align:right;">
+                  <button
+                    (click)="onSearch(item.country)"
+                    class="btn btn-ghost btn-sm"
+                    [disabled]="isLoading"
+                    title="Refazer pesquisa"
+                  >
+                    <i class="bi bi-arrow-repeat"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card">
+      <div class="card-header" style="padding-bottom:8px;">
+        <h5 class="card-title">Estatísticas por País</h5>
+        <p class="text-sm text-muted-c" style="margin-top:4px; margin-bottom:0;">
+          Universidades retornadas por país consultado
+        </p>
+      </div>
+      <div class="card-body chart-wrap">
+        <canvas #historyChart></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,4 @@
+/* app-level CSS — sidebar nav hero gradient override */
+.hero-gradient {
+  background: linear-gradient(135deg, #1a1040 0%, #0d0f1a 60%, #121830 100%);
+}

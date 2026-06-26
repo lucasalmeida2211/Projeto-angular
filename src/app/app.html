@@ -1,0 +1,99 @@
+<!-- AngularUniversity — Dark Academic Layout -->
+<div class="app-shell">
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.mobile-open]="sidebarOpen">
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="bi bi-mortarboard-fill"></i>
+      </div>
+      <p class="brand-name">Angular<br>University</p>
+      <p class="brand-sub">Catálogo Mundial</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <p class="nav-section-label">Navegação</p>
+      <ul>
+        <li>
+          <a class="nav-link-item"
+             routerLink="/home"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-house-door nav-icon"></i>
+            Início
+          </a>
+        </li>
+        <li>
+          <a class="nav-link-item"
+             routerLink="/results"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-search nav-icon"></i>
+            Resultados
+          </a>
+        </li>
+        <li>
+          <a class="nav-link-item"
+             routerLink="/favorites"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-star nav-icon"></i>
+            Favoritos
+          </a>
+        </li>
+        <li>
+          <a class="nav-link-item"
+             routerLink="/about"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-info-circle nav-icon"></i>
+            Sobre
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Footer actions -->
+    <div class="sidebar-footer">
+      <button class="theme-toggle-btn" (click)="toggleTheme()">
+        <i class="bi" [ngClass]="isDarkMode() ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+        {{ isDarkMode() ? 'Tema Claro' : 'Tema Escuro' }}
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content area -->
+  <div class="main-content">
+
+    <!-- Mobile topbar -->
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="gold-dot"></span>
+        AngularUniversity
+      </div>
+      <button class="hamburger-btn" (click)="toggleSidebar()" aria-label="Menu">
+        <i class="bi bi-list"></i>
+      </button>
+    </header>
+
+    <!-- Router outlet -->
+    <div class="page-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="footer-brand">AngularUniversity</span>
+        <p class="footer-copy">
+          Desenvolvido por <strong style="color: var(--text-secondary)">Lucas</strong> &mdash; Desenvolvimento Web &copy; 2026
+        </p>
+      </div>
+    </footer>
+  </div>
+</div>
